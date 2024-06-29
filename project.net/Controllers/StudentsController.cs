@@ -9,5 +9,10 @@ namespace project.net.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult Add()
+        {
+            
+        }
     }
 }
