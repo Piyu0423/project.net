@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using project.net.Data;
 using project.net.Models;
 using project.net.Models.Entities;
@@ -33,5 +34,35 @@ namespace project.net.Controllers
             await dbContext.SaveChangesAsync();
             return View();
         }
+        [HttpGet]
+        public async Task<IActionResult> List()
+        {
+            var students = await dbContext.Students.ToListAsync();
+            return View(students);
+        }
+        [HttpGet]
+
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var student= await dbContext.Students.FindAsync(id);
+            return View(student);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(Student viewModel)
+        {
+            var student = await dbContext.Students.FindAsync(viewModel.Id);
+            if (student is not null) { 
+                student.Name = viewModel.Name;
+                student.Email = viewModel.Email;
+                student.Phone = viewModel.Phone;
+                student.Subscribed = viewModel.Subscribed;
+
+                await dbContext.SaveChangesAsync();
+            }
+            return RedirectToAction("List","Students");
+
+        }
+
+
     }
 }
